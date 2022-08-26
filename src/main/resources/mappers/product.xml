@@ -1,0 +1,34 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.emart.back.back.dao.ProductDAO">
+
+	<select id="selectProductByFilter" parameterType="Integer" resultType="Product">
+		
+        SELECT 
+            p.no, p.name, p.price, p.sale, p.event, p.filter,
+            (SELECT COUNT(*) FROM thumb WHERE p.no=product_no) AS `thumb`,
+            (SELECT COUNT(*) FROM comment WHERE p.no=product_no) AS `comment`,
+	        (SELECT src FROM img WHERE p.no = product_no) AS `img`
+        FROM 
+            product AS p
+        WHERE 
+            filter <![CDATA[&]]> #{filter} <![CDATA[>]]> 0
+        LIMIT 
+            10 OFFSET #{page}
+	</select>
+
+	<select id="selectProductAll" parameterType="Integer" resultType="Product">
+		
+        SELECT 
+            p.no, p.name, p.price, p.sale, p.event, p.filter,
+            (SELECT COUNT(*) FROM thumb WHERE p.no=product_no) AS `thumb`,
+            (SELECT COUNT(*) FROM comment WHERE p.no=product_no) AS `comment`,
+	        (SELECT src FROM img WHERE p.no = product_no) AS `img`
+        FROM 
+            product AS p
+        LIMIT 
+            10 OFFSET #{page}
+	</select>
+
+</mapper>
